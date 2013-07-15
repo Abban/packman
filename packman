@@ -1,0 +1,48 @@
+<?php
+/**
+ * Packman - Minimal Front End Package Manager
+ *
+ * @package  Packman
+ * @version  0.1.1
+ * @author   Abban Dunne <himself@abandon.ie>
+ * @link     http://abandon.ie
+ */
+
+//  =============================================================
+//  = File Constants                                            =
+//  =============================================================
+
+define('EXT', '.php');
+define('PACKLIB', 'packlib');
+
+
+
+//  =============================================================
+//  = Set Up Paths                                              =
+//  =============================================================
+
+chdir(__DIR__);
+define('DS', DIRECTORY_SEPARATOR);
+define('BASEPATH', __DIR__.DS);
+
+
+
+//  =============================================================
+//  = Import Required Config and Classes                        =
+//  =============================================================
+
+$imports = array(
+	'config',
+	'classes/packman',
+	'classes/json',
+	'classes/install',
+	'classes/help',
+);
+
+foreach($imports as $import) require(BASEPATH.PACKLIB.DS.$import.EXT);
+
+//  =============================================================
+//  = And Go!                                                   =
+//  =============================================================
+
+Packman::go();

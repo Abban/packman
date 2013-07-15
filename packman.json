@@ -1,0 +1,18 @@
+{
+	"name" : "packman",
+	"description" : "Packman Sample.",
+	"modulesFolder" : "assets/modules",
+	"modules" : {
+		"jquery-cookielaw": {
+			"version" : "4.0.*",
+			"location" : "https://github.com/webtogether/jquery-cookielaw.git",
+			"tag" : "1.2",
+			"branch" : "1.2",
+			"files" : [
+				"jquery-cookielaw.js",
+				"libs/something.less"
+			]
+		},
+		"wt-menu" : "1.0.0"
+	}
+}
