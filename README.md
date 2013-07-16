@@ -9,9 +9,10 @@ Minimal project module manager
 3. Open Terminal, navigate to the project and type ``php packman install``.
 
 Also to stop Packman being deployed you can add the following to your ``.gitignore``:
-     packlib/
-     packman
-     packman.json
+     
+    packlib/
+    packman
+    packman.json
 
 ## Description of the JSON
     {
