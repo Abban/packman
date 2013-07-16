@@ -5,6 +5,7 @@
 	"modules" : {
 		"wt-menu": {
 			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%",
+			"path" : "assets/wt-modules",
 			"pathData" : {
 				"username" : "webtogether",
 				"repo" : "wt-menu",

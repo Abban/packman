@@ -26,7 +26,7 @@ class Module {
 		}
 
 		$this->url = $url;
-		$this->path = BASEPATH.$path.DS.$name;
+		$this->path = BASEPATH.(isset($module->path) ? $module->path : $path).DS.$name;
 		$this->name = $name;
 		$this->files = (isset($module->files)) ? $module->files : false;
 		$this->mode = $mode;
