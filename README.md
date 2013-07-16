@@ -1,4 +1,4 @@
-packman
+Packman
 =======
 
 Minimal project module manager
@@ -13,7 +13,7 @@ Minimal project module manager
     	"name" : "packman", //Name: currently does nothing
     	"description" : "Packman Sample", //Description: currently does nothing
     	"modulesFolder" : "assets/modules", //Modules Folder: Where the modules will be installed
-    	"modules" : { //All modules you want
+    	"modules" : { //All modules you want, names are the folder created
     		"wt-menu": { //No files are specified so entire repo will be imported
     			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%", //URL of the repo
     			"pathData" : { //These vars will be inserted into the appropriate place in the URL
