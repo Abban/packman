@@ -1,4 +1,4 @@
 packman
 =======
 
-Minimal project package manager
+Minimal project module manager

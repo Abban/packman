@@ -10,10 +10,18 @@
 				"repo" : "wt-menu",
 				"branch" : "test",
 				"tag" : "1.2"
+			}
+		},
+		"typeplate": {
+			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%",
+			"pathData" : {
+				"username" : "typeplate",
+				"repo" : "typeplate.github.io",
+				"branch" : "master"
 			},
 			"files" : [
-				"jquery-cookielaw.js",
-				"libs/something.less"
+				"typeplate/scss/_typeplate.scss",
+				"typeplate/scss/_vars-typeplate.scss"
 			]
 		}
 	}

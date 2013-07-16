@@ -37,6 +37,8 @@ class Module {
 	 */
 	function install()
 	{
+		echo 'Installing ' .$this->name .PHP_EOL;
+
 		// Set paths and name
 		$work = BASEPATH.PACKLIB.DS.TEMP;
 		$target = $work.'packman-module.zip';
@@ -45,23 +47,49 @@ class Module {
 		if(!is_dir($work)) mkdir($work, 0700, true);
 
 		// Download the file
+		echo 'Downloading zip from ' .$this->url .PHP_EOL;
 		File::put($target, $this->download($this->url));
 
 		// Create Zip object
+		echo 'Extracting and installing ' .$this->name .PHP_EOL;
 		$zip = new ZipArchive;
 		$zip->open($target);
 
 		// Make a directory to put the zip contents in
-		mkdir($work.'zip');
+		mkdir($work.DS.'unzip');
 
 		// Extract the zip
-		$zip->extractTo($work.'zip');
+		$zip->extractTo($work.DS.'unzip');
 
-		// Move files by order created deleting as we go
-		$latest = File::latest($work.'zip')->getRealPath();
-		@chmod($latest, 0777);
-		File::mvdir($latest, $this->path);
-		File::rmdir($work.'zip');
+		// If files are specified just move them
+		if($this->files)
+		{
+			$latest = File::latest($work.DS.'unzip')->getRealPath();
+			foreach($this->files as $file)
+			{
+				if(file_exists($latest.DS.$file))
+				{
+					echo 'Moving ' .$latest.DS.$file .' repo to ' .$this->path.DS.basename($file) .PHP_EOL;
+					File::mkdir($this->path);
+					File::move($latest.DS.$file, $this->path.DS.basename($file));
+				}
+				else
+				{
+					echo 'Error, file not found ' .$latest.DS.$file .PHP_EOL;
+				}
+			}
+			File::rmdir($work.DS.'unzip');
+		}
+		// No files specified just stick the contents of the entire repo into the module folder
+		else
+		{
+			// Move files by order created deleting as we go
+			echo 'Moving entire repo to ' .$this->path .PHP_EOL;
+			$latest = File::latest($work.DS.'unzip')->getRealPath();
+			@chmod($latest, 0777);
+			File::mvdir($latest, $this->path);
+			File::rmdir($work.DS.'unzip');
+		}
 
 		// Close zip and delete
 		$zip->close();
