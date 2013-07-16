@@ -6,7 +6,7 @@ class Install {
 
 	function __construct()
 	{
-		$this->mode = 'Install';
+		$this->mode = 'Installing';
 	}
 	
 	function go()

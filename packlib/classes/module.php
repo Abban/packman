@@ -39,7 +39,7 @@ class Module {
 	 */
 	function install()
 	{
-		echo $this->mode .'ing ' .$this->name .PHP_EOL;
+		echo $this->mode .' ' .$this->name .PHP_EOL;
 
 		// Set paths and name
 		$work = BASEPATH.PACKLIB.DS.TEMP;
@@ -53,7 +53,7 @@ class Module {
 		File::put($target, $this->download($this->url));
 
 		// Create Zip object
-		echo 'Extracting and ' .strtolower($this->mode) .'ing ' .$this->name .PHP_EOL;
+		echo 'Extracting and ' .strtolower($this->mode) .' ' .$this->name .PHP_EOL;
 		$zip = new ZipArchive;
 		$zip->open($target);
 
