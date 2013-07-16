@@ -1,6 +1,13 @@
 <?php defined('DS') or die('No direct script access.');
 
 class Install {
+
+	protected $mode;
+
+	function __construct()
+	{
+		$this->mode = 'Install';
+	}
 	
 	function go()
 	{
@@ -9,7 +16,7 @@ class Install {
 		foreach($options->modules as $name => $module)
 		{
 			$m = new Module();
-			$m->setup($name, $module, $options->modulesFolder);
+			$m->setup($name, $module, $options->modulesFolder, $this->mode);
 			$m->install();
 		}
 	}

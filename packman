@@ -41,6 +41,7 @@ $imports = array(
 	'classes/json',
 	'classes/file',
 	'classes/install',
+	'classes/update',
 	'classes/module',
 	'classes/help',
 );

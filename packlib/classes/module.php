@@ -6,6 +6,7 @@ class Module {
 	private $path;
 	private $name;
 	private $files;
+	private $mode;
 	
 	/**
 	 * Add the module details
@@ -15,7 +16,7 @@ class Module {
 	 * @param  string $path
 	 * @return void
 	 */
-	public function setup($name, $module, $path)
+	public function setup($name, $module, $path, $mode)
 	{
 		// Create the repo url from data passed
 		$url = $module->url;
@@ -27,7 +28,8 @@ class Module {
 		$this->url = $url;
 		$this->path = BASEPATH.$path.DS.$name;
 		$this->name = $name;
-		$this->files = $module->files;
+		$this->files = (isset($module->files)) ? $module->files : false;
+		$this->mode = $mode;
 	}
 
 	/**
@@ -37,7 +39,7 @@ class Module {
 	 */
 	function install()
 	{
-		echo 'Installing ' .$this->name .PHP_EOL;
+		echo $this->mode .'ing ' .$this->name .PHP_EOL;
 
 		// Set paths and name
 		$work = BASEPATH.PACKLIB.DS.TEMP;
@@ -51,7 +53,7 @@ class Module {
 		File::put($target, $this->download($this->url));
 
 		// Create Zip object
-		echo 'Extracting and installing ' .$this->name .PHP_EOL;
+		echo 'Extracting and ' .strtolower($this->mode) .'ing ' .$this->name .PHP_EOL;
 		$zip = new ZipArchive;
 		$zip->open($target);
 
