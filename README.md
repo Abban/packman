@@ -16,6 +16,7 @@ Minimal project module manager
     	"modules" : { //All modules you want, names are the folder created
     		"wt-menu": { //No files are specified so entire repo will be imported
     			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%", //URL of the repo
+    			"path" : "assets/wt-modules", // You can pick a custom folder to install the module
     			"pathData" : { //These vars will be inserted into the appropriate place in the URL
     				"username" : "webtogether",
     				"repo" : "wt-menu",
