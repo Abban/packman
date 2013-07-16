@@ -4,7 +4,7 @@ Packman
 Minimal project module manager
 
 ## Installation
-1. Stick the ``packman`` file, ``packman.json`` file and ``packlib`` folder into your project root.
+1. Stick the ``packman`` file, ``packman.json`` file and ``packlib`` folder into your project root. You might need to chmod ``packman`` to 777.
 2. Edit ``packman.json`` to include any modules you want to install.
 3. Open Terminal, navigate to the project and type ``php packman install``.
 
