@@ -1,4 +1,6 @@
-<?php namespace Laravel; use FilesystemIterator as fIterator;
+<?php defined('DS') or die('No direct script access.');
+
+use FilesystemIterator as fIterator;
 
 class File {
 

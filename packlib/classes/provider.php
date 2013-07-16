@@ -1,6 +1,4 @@
-<?php namespace Laravel\CLI\Tasks\Bundle\Providers;
-
-use Laravel\File;
+<?php defined('DS') or die('No direct script access.');
 
 abstract class Provider {
 

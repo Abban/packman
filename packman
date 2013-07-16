@@ -8,12 +8,15 @@
  * @link     http://abandon.ie
  */
 
+
+
 //  =============================================================
 //  = File Constants                                            =
 //  =============================================================
 
 define('EXT', '.php');
 define('PACKLIB', 'packlib');
+define('TEMP', 'zips');
 
 
 
@@ -33,13 +36,18 @@ define('BASEPATH', __DIR__.DS);
 
 $imports = array(
 	'config',
+	'helpers',
 	'classes/packman',
 	'classes/json',
+	'classes/file',
 	'classes/install',
+	'classes/module',
 	'classes/help',
 );
 
 foreach($imports as $import) require(BASEPATH.PACKLIB.DS.$import.EXT);
+
+
 
 //  =============================================================
 //  = And Go!                                                   =
