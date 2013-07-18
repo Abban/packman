@@ -10,6 +10,13 @@
 
 class Help {
 	
+
+
+	/**
+	 * outputs available commands
+	 *
+	 * @return void
+	 */
 	function go()
 	{
 		global $top_level_commands;

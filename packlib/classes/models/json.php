@@ -10,16 +10,38 @@
 
 class Json {
 	
+
+
+	/**
+	 * Gets the packman.json file
+	 * 
+	 * @return json
+	 */
 	static function getPackageFile()
 	{
 		return self::getFile(BASEPATH .'packman.json');
 	}
 
+
+
+	/**
+	 * Gets the lock file
+	 * 
+	 * @return json
+	 */
 	static function getLockFile()
 	{
 		return self::getFile(BASEPATH .'packman.lock');
 	}
 
+
+
+	/**
+	 * Gets a json file by filename
+	 * 
+	 * @param  string $file
+	 * @return json/bool
+	 */
 	private static function getFile($file)
 	{
 		if($json = file_get_contents($file))

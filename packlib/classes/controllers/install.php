@@ -12,6 +12,13 @@ class Install {
 
 	protected $mode = 'Installing';
 	
+
+
+	/**
+	 * runs the installation
+	 * 
+	 * @return void
+	 */
 	public function go()
 	{
 		$options = Json::getPackageFile();

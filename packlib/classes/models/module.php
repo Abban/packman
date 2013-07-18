@@ -27,8 +27,7 @@ class Module {
 	 * Add the module details
 	 * 
 	 * @param  string $name
-	 * @param  object $module
-	 * @param  string $path
+	 * @param  string $mode
 	 * @return bool
 	 */
 	public function setup($name, $mode)
@@ -143,12 +142,26 @@ class Module {
 		$this->setInstalled();
 	}
 
+
+
+	/**
+	 * update a module
+	 * 
+	 * @return void
+	 */
 	function update()
 	{
 		$this->delete();
 		if(!$deleting) $this->install();
 	}
 
+
+
+	/**
+	 * delete a module
+	 * 
+	 * @return void
+	 */
 	function delete()
 	{
 		if($this->installed)
@@ -161,6 +174,8 @@ class Module {
 			echo 'Error, cannot remove ' .$this->name .' as it is not installed.' .PHP_EOL;
 		}
 	}
+
+
 
 	/**
 	 * Download a remote zip archive from a URL.
@@ -179,6 +194,13 @@ class Module {
 		return $remote;
 	}
 
+
+
+	/**
+	 * Sets the module to installed or not
+	 * 
+	 * @param boolean $installed
+	 */
 	protected function setInstalled($installed = true)
 	{
 		$this->installed = $installed;

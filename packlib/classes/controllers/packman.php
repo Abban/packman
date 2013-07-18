@@ -10,6 +10,13 @@
 
 class Packman {
 
+
+
+	/**
+	 * Runs Packman
+	 * 
+	 * @return void
+	 */
 	static function go()
 	{
 		global $top_level_commands, $argv;

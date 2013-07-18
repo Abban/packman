@@ -12,6 +12,14 @@ class Update {
 
 	private $mode = 'Updating';
 
+
+
+	/**
+	 * Runs the update
+	 * 
+	 * @param  string $argv
+	 * @return void
+	 */
 	public function go($argv)
 	{
 		$json = Json::getPackageFile();
@@ -42,6 +50,14 @@ class Update {
 		File::copy(BASEPATH .'packman.json', BASEPATH .'packman.lock');
 	}
 
+
+
+	/**
+	 * Processes a single module by name
+	 * 
+	 * @param  string $name
+	 * @return void
+	 */
 	private function processModule($name)
 	{
 		$m = new Module();
