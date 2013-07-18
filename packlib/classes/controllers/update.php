@@ -1,14 +1,13 @@
 <?php defined('DS') or die('No direct script access.');
-
 /**
- * For now this is just installing by another name
+ * Packman - Minimal Front End Package Manager
  *
- * What it will do is:
- * 1. Only install modules that have been updated.
- * 2. Specifically update a single module if the name is passed: `php packman update wt-menu`
- * 3. Check for any modules that have been removed and delete them.
- * 
+ * @package  Packman
+ * @since  0.2
+ * @author   Abban Dunne <himself@abandon.ie>
+ * @link     http://abandon.ie
  */
+
 class Update {
 
 	private $mode = 'Updating';
@@ -23,7 +22,7 @@ class Update {
 			// Make sure the module is in the json file
 			if(!is_object($json->modules->$argv[2]))
 			{
-				echo 'Could not find module `' .$argv[2] .'` to update' .PHP_EOL;
+				echo 'Error: Could not find module `' .$argv[2] .'` to update' .PHP_EOL;
 			}
 			// Its there so process it
 			else
@@ -46,7 +45,13 @@ class Update {
 	private function processModule($name)
 	{
 		$m = new Module();
-		$m->setup($name, $this->mode);
-		$m->update();
+		if($m->setup($name, $this->mode))
+		{
+			$m->update();
+		}
+		else
+		{
+			echo 'Error: module `' .$name '` was not found in packman.json or packman.lock';
+		}
 	}
 }

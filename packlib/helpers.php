@@ -1,4 +1,5 @@
 <?php
+// Lifted from Laravel
 
 /**
  * Dump the given value and kill the script.

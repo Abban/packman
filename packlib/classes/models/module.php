@@ -1,8 +1,17 @@
 <?php defined('DS') or die('No direct script access.');
+/**
+ * Packman - Minimal Front End Package Manager
+ *
+ * @package  Packman
+ * @since  0.2
+ * @author   Abban Dunne <himself@abandon.ie>
+ * @link     http://abandon.ie
+ */
 
 class Module {
 
 	private $installed = false;
+	private $deleting = false;
 
 	private $url;
 	private $path;
@@ -20,7 +29,7 @@ class Module {
 	 * @param  string $name
 	 * @param  object $module
 	 * @param  string $path
-	 * @return void
+	 * @return bool
 	 */
 	public function setup($name, $mode)
 	{
@@ -56,6 +65,13 @@ class Module {
 			$this->lockName  = $name;
 			$this->lockFiles = (isset($module->files)) ? $module->files : false;
 		}
+
+		if(!$this->name && $this->lockName)
+		{
+			$this->deleting = true;
+		}
+
+		return ($this->name || $this->lockName);
 	}
 
 	/**
@@ -130,7 +146,7 @@ class Module {
 	function update()
 	{
 		$this->delete();
-		$this->install();
+		if(!$deleting) $this->install();
 	}
 
 	function delete()
@@ -166,8 +182,8 @@ class Module {
 	protected function setInstalled($installed = true)
 	{
 		$this->installed = $installed;
-		$this->lockPath  = ($installed) ? $this->path : '';
-		$this->lockName  = ($installed) ? $this->name : '';
-		$this->lockFiles = ($installed) ? $this->files : '';
+		$this->lockPath  = ($installed) ? $this->path : null;
+		$this->lockName  = ($installed) ? $this->name : null;
+		$this->lockFiles = ($installed) ? $this->files : null;
 	}
 }

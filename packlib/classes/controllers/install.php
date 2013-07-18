@@ -1,4 +1,12 @@
 <?php defined('DS') or die('No direct script access.');
+/**
+ * Packman - Minimal Front End Package Manager
+ *
+ * @package  Packman
+ * @since  0.2
+ * @author   Abban Dunne <himself@abandon.ie>
+ * @link     http://abandon.ie
+ */
 
 class Install {
 
