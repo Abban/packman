@@ -12,16 +12,18 @@ class Module {
 
 	private $installed = false;
 	private $deleting = false;
+	private $mode;
 
 	private $url;
 	private $path;
 	private $name;
 	private $files;
-	private $mode;
+	private $folders;
 
 	private $lockName;
 	private $lockPath;
 	private $lockFiles;
+	private $lockFolders;
 
 
 
@@ -50,10 +52,11 @@ class Module {
 				foreach($module->pathData as $title => $data) $url = str_replace('%' .$title .'%', $data, $url);
 			}
 
-			$this->url   = $url;
-			$this->path  = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
-			$this->name  = $name;
-			$this->files = (isset($module->files)) ? $module->files : false;
+			$this->url     = $url;
+			$this->path    = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
+			$this->name    = $name;
+			$this->files   = (isset($module->files)) ? $module->files : false;
+			$this->folders = (isset($module->folders)) ? $module->folders : false;
 		}
 
 		// Set up the lock vars
@@ -61,10 +64,11 @@ class Module {
 		{
 			$module = $lock->modules->$name;
 
-			$this->installed = true;
-			$this->lockPath  = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
-			$this->lockName  = $name;
-			$this->lockFiles = (isset($module->files)) ? $module->files : false;
+			$this->installed   = true;
+			$this->lockPath    = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
+			$this->lockName    = $name;
+			$this->lockFiles   = (isset($module->files)) ? $module->files : false;
+			$this->lockFolders = (isset($module->folders)) ? $module->folders : false;
 		}
 
 		if(!$this->name && $this->lockName)
@@ -109,23 +113,44 @@ class Module {
 		$zip->extractTo($work.DS.'unzip');
 
 		// If files are specified just move them
-		if($this->files)
+		if($this->files || $this->folders)
 		{
 			$latest = File::latest($work.DS.'unzip')->getRealPath();
-			foreach($this->files as $file)
+
+			// Move folders
+			if($this->folders)
 			{
-				if(file_exists($latest.DS.$file))
+				foreach($this->folders as $folder)
 				{
-					echo 'Moving ' .$latest.DS.$file .' repo to ' .$this->path.DS.basename($file) .PHP_EOL;
-					File::mkdir($this->path);
-					File::move($latest.DS.$file, $this->path.DS.basename($file));
-				}
-				else
-				{
-					echo 'Error, file not found ' .$latest.DS.$file .PHP_EOL;
+					if(is_dir($latest.DS.$folder))
+					{
+						echo 'Moving folder ' .$latest.DS.$folder .' to ' .$this->path.DS.basename($folder) .PHP_EOL;
+						File::mvdir($latest.DS.$folder, $this->path.DS.basename($folder));
+					}
+					else
+					{
+						echo 'Error, folder not found ' .$latest.DS.$file .PHP_EOL;
+					}
 				}
 			}
-			File::rmdir($work.DS.'unzip');
+
+			// Move single files
+			if($this->files)
+			{
+				foreach($this->files as $file)
+				{
+					if(file_exists($latest.DS.$file))
+					{
+						echo 'Moving file ' .$latest.DS.$file .' to ' .$this->path.DS.basename($file) .PHP_EOL;
+						File::mkdir($this->path);
+						File::move($latest.DS.$file, $this->path.DS.basename($file));
+					}
+					else
+					{
+						echo 'Error, file not found ' .$latest.DS.$file .PHP_EOL;
+					}
+				}
+			}
 		}
 		// No files specified just stick the contents of the entire repo into the module folder
 		else
@@ -135,8 +160,10 @@ class Module {
 			$latest = File::latest($work.DS.'unzip')->getRealPath();
 			@chmod($latest, 0777);
 			File::mvdir($latest, $this->path);
-			File::rmdir($work.DS.'unzip');
 		}
+
+		// Remove the temp folder
+		File::rmdir($work.DS.'unzip');
 
 		// Close zip and delete
 		$zip->close();

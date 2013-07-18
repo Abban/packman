@@ -23,6 +23,9 @@
 			"files" : [
 				"typeplate/scss/_typeplate.scss",
 				"typeplate/scss/_vars-typeplate.scss"
+			],
+			"folders" : [
+				"typeplate/css"
 			]
 		}
 	}
