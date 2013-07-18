@@ -9,7 +9,7 @@ Minimal project module manager
 3. Open Terminal, navigate to the project and type ``php packman install``.
 
 ## Usage
-When you want to change something just type ``php packman update`` and it will delete your modules and replace them with updated versions. You can also update a single module with ``php packman update module-name``.
+When you want to change something just edit the ``packman.json`` file then type ``php packman update`` and it will delete your modules and replace them with updated versions. You can also update a single module with ``php packman update module-name``.
 
 ## Don't Deploy Packman
 To stop Packman being deployed you can add the following to your ``.gitignore``:
