@@ -67,7 +67,7 @@ class Update {
 		}
 		else
 		{
-			echo 'Error: module `' .$name '` was not found in packman.json or packman.lock';
+			echo 'Error: module `' .$name .'` was not found in packman.json or packman.lock';
 		}
 	}
 }
