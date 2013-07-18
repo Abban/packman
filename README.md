@@ -53,7 +53,7 @@ Here's a sample of the json file:
 
 Currently ``name`` and ``description`` do nothing. ``modulesFolder`` is the default location you want your modules in.
 
-Modules containes each module. You can see in this example wt-menu has its own custom path specified. If you don't include the path paramater it will default to the general one. The ``url`` parameter is the online location of your files. In this you can see %username%, %repo%, %branch% etc. These values will be replaced by those in ``pathData``. This just makes it a bit easier to add multiple repos with the same url. The typeplate module also has ``files`` specified. This is used if you only want to use certain files from a repo. Only those files will be imported into its module.
+Modules containes each module. You can see in this example wt-menu has its own custom path specified. If you don't include the path paramater it will default to the general one. The ``url`` parameter is the online location of your files. In this you can see ``%username%``, ``%repo%``, ``%branch%`` etc. These values will be replaced by those in ``pathData``. This just makes it a bit easier to add multiple repos with the same url. The typeplate module also has ``files`` specified. This is used if you only want to use certain files from a repo. Only those files will be imported into its module.
 
 ##TODO
 * Allow folders to be imported into a module.
