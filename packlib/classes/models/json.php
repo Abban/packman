@@ -44,7 +44,7 @@ class Json {
 	 */
 	private static function getFile($file)
 	{
-		if($json = file_get_contents($file))
+		if($json = @file_get_contents($file))
 		{
 			// TODO: Error Reporting
 			return json_decode($json);

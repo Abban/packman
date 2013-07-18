@@ -20,11 +20,11 @@
 				"repo" : "typeplate.github.io",
 				"branch" : "master"
 			},
-			"files" : [
-				"typeplate/scss/_typeplate.scss",
-				"typeplate/scss/_vars-typeplate.scss",
-				"typeplate/css"
-			]
+			"files" : {
+				"typeplate/scss/_typeplate.scss" : "scss",
+				"typeplate/scss/_vars-typeplate.scss" : "scss",
+				"typeplate/css" : false
+			}
 		}
 	}
 }

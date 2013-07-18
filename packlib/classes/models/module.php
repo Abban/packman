@@ -50,10 +50,10 @@ class Module {
 				foreach($module->pathData as $title => $data) $url = str_replace('%' .$title .'%', $data, $url);
 			}
 
-			$this->url     = $url;
-			$this->path    = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
-			$this->name    = $name;
-			$this->files   = (isset($module->files)) ? $module->files : false;
+			$this->url      = $url;
+			$this->path     = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
+			$this->name     = $name;
+			$this->files    = (isset($module->files)) ? $module->files : false;
 		}
 
 		// Set up the lock vars
@@ -109,31 +109,34 @@ class Module {
 		$zip->extractTo($work.DS.'unzip');
 
 		// If files are specified just move them
-		if($this->files || $this->folders)
+		if($this->files)
 		{
 			$latest = File::latest($work.DS.'unzip')->getRealPath();
 
 			// Move single files and folders
 			if($this->files)
 			{
-				foreach($this->files as $file)
+				foreach($this->files as $file => $loc)
 				{
+					$from = $latest.DS.$file;
+					$to = $this->path.DS.($loc ? $loc.DS : '').basename($file);
+
 					// If its a folder
-					if(is_dir($latest.DS.$file))
+					if(is_dir($from))
 					{
-						echo 'Moving folder ' .$latest.DS.$file .' to ' .$this->path.DS.basename($file) .PHP_EOL;
-						File::mvdir($latest.DS.$file, $this->path.DS.basename($file));
+						echo 'Moving folder ' .$from .' to ' .$to .PHP_EOL;
+						File::mvdir($from, $to);
 					}
 					// If its a file
-					elseif(file_exists($latest.DS.$file))
+					elseif(file_exists($from))
 					{
-						echo 'Moving file ' .$latest.DS.$file .' to ' .$this->path.DS.basename($file) .PHP_EOL;
-						File::mkdir($this->path);
-						File::move($latest.DS.$file, $this->path.DS.basename($file));
+						echo 'Moving file ' .$from .' to ' .$to .PHP_EOL;
+						File::mkdir($this->path.($loc ? DS.$loc : ''));
+						File::move($from, $to);
 					}
 					else
 					{
-						echo 'Error, file not found ' .$latest.DS.$file .PHP_EOL;
+						echo 'Error, file not found ' .$from .PHP_EOL;
 					}
 				}
 			}
