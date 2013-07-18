@@ -37,13 +37,13 @@ define('BASEPATH', __DIR__.DS);
 $imports = array(
 	'config',
 	'helpers',
-	'classes/packman',
-	'classes/json',
 	'classes/file',
-	'classes/install',
-	'classes/update',
-	'classes/module',
-	'classes/help',
+	'classes/controllers/packman',
+	'classes/controllers/install',
+	'classes/controllers/update',
+	'classes/controllers/help',
+	'classes/models/json',
+	'classes/models/module',
 );
 
 foreach($imports as $import) require(BASEPATH.PACKLIB.DS.$import.EXT);

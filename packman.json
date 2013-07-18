@@ -1,7 +1,7 @@
 {
 	"name" : "packman",
 	"description" : "Packman Sample",
-	"modulesFolder" : "assets/modules",
+	"path" : "assets/modules",
 	"modules" : {
 		"wt-menu": {
 			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%",

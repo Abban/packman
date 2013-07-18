@@ -2,12 +2,18 @@
 
 class Module {
 
+	private $installed = false;
+
 	private $url;
 	private $path;
 	private $name;
 	private $files;
 	private $mode;
-	
+
+	private $lockName;
+	private $lockPath;
+	private $lockFiles;
+
 	/**
 	 * Add the module details
 	 * 
@@ -16,20 +22,40 @@ class Module {
 	 * @param  string $path
 	 * @return void
 	 */
-	public function setup($name, $module, $path, $mode)
+	public function setup($name, $mode)
 	{
-		// Create the repo url from data passed
-		$url = $module->url;
-		if($module->pathData)
+		$json = Json::getPackageFile();
+		$lock = Json::getLockFile();
+		$this->mode = $mode;
+
+		// Set up the json vars
+		if($json && is_object($json->modules->$name))
 		{
-			foreach($module->pathData as $title => $data) $url = str_replace('%' .$title .'%', $data, $url);
+			$module = $json->modules->$name;
+
+			// Create the repo url from data passed
+			$url = $module->url;
+			if($module->pathData)
+			{
+				foreach($module->pathData as $title => $data) $url = str_replace('%' .$title .'%', $data, $url);
+			}
+
+			$this->url   = $url;
+			$this->path  = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
+			$this->name  = $name;
+			$this->files = (isset($module->files)) ? $module->files : false;
 		}
 
-		$this->url = $url;
-		$this->path = BASEPATH.(isset($module->path) ? $module->path : $path).DS.$name;
-		$this->name = $name;
-		$this->files = (isset($module->files)) ? $module->files : false;
-		$this->mode = $mode;
+		// Set up the lock vars
+		if($lock && is_object($lock->modules->$name))
+		{
+			$module = $lock->modules->$name;
+
+			$this->installed = true;
+			$this->lockPath  = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
+			$this->lockName  = $name;
+			$this->lockFiles = (isset($module->files)) ? $module->files : false;
+		}
 	}
 
 	/**
@@ -96,6 +122,28 @@ class Module {
 		// Close zip and delete
 		$zip->close();
 		@unlink($target);
+
+		// Set the module to installed
+		$this->setInstalled();
+	}
+
+	function update()
+	{
+		$this->delete();
+		$this->install();
+	}
+
+	function delete()
+	{
+		if($this->installed)
+		{
+			File::rmdir($this->lockPath);
+			$this->setInstalled(false);
+		}
+		else
+		{
+			echo 'Error, cannot remove ' .$this->name .' as it is not installed.' .PHP_EOL;
+		}
 	}
 
 	/**
@@ -113,5 +161,13 @@ class Module {
 		}
 
 		return $remote;
+	}
+
+	protected function setInstalled($installed = true)
+	{
+		$this->installed = $installed;
+		$this->lockPath  = ($installed) ? $this->path : '';
+		$this->lockName  = ($installed) ? $this->name : '';
+		$this->lockFiles = ($installed) ? $this->files : '';
 	}
 }
