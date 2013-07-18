@@ -8,28 +8,35 @@ Minimal project module manager
 2. Edit ``packman.json`` to include any modules you want to install.
 3. Open Terminal, navigate to the project and type ``php packman install``.
 
-Also to stop Packman being deployed you can add the following to your ``.gitignore``:
+## Usage
+When you want to change something just type ``php packman update`` and it will delete your modules and replace them with updated versions. You can also update a single module with ``php packman update module-name``.
+
+## Don't Deploy Packman
+To stop Packman being deployed you can add the following to your ``.gitignore``:
      
     packlib/
     packman
     packman.json
+    packman.lock
 
 ## Description of the JSON
+Here's a sample of the json file:
+
     {
-    	"name" : "packman", //Name: currently does nothing
-    	"description" : "Packman Sample", //Description: currently does nothing
-    	"modulesFolder" : "assets/modules", //Modules Folder: Where the modules will be installed
-    	"modules" : { //All modules you want, names are the folder created
-    		"wt-menu": { //No files are specified so entire repo will be imported
-    			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%", //URL of the repo
-    			"path" : "assets/wt-modules", // You can pick a custom folder to install the module
-    			"pathData" : { //These vars will be inserted into the appropriate place in the URL
+    	"name" : "packman",
+    	"description" : "Packman Sample",
+    	"modulesFolder" : "assets/modules",
+    	"modules" : {
+    		"wt-menu": {
+    			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%",
+    			"path" : "assets/wt-modules",
+    			"pathData" : {
     				"username" : "webtogether",
     				"repo" : "wt-menu",
     				"branch" : "test"
     			}
     		},
-    		"typeplate": { // Files to be installed are specified
+    		"typeplate": {
     			"url" : "https://api.github.com/repos/%username%/%repo%/zipball/%branch%",
     			"pathData" : {
     				"username" : "typeplate",
@@ -43,3 +50,11 @@ Also to stop Packman being deployed you can add the following to your ``.gitigno
     		}
     	}
     }
+
+Currently _name_ and _description_ do nothing. _modulesFolder_ is the default location you want your modules in.
+
+Modules containes each module. You can see in this example wt-menu has its own custom path specified. If you don't include the path paramater it will default to the general one. The _url_ parameter is the online location of your files. In this you can see %username%, %repo%, %branch% etc. Thee valuse will be replaced by those in _pathData_. This just makes it a bit easier to add multiple repos with the same url. The typeplate module also has _files_ specified. This is used if you only want to use certain files from a repo. Only those files will be imported into its module.
+
+##TODO
+* Allow folders to be imported into a module.
+* Option to create consistent less/sass import files and a codekit prepend javascript file that can be imported into your own stylesheets/js. This means after you update you don't have to manually include all the resources.
