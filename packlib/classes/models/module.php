@@ -18,12 +18,10 @@ class Module {
 	private $path;
 	private $name;
 	private $files;
-	private $folders;
 
 	private $lockName;
 	private $lockPath;
 	private $lockFiles;
-	private $lockFolders;
 
 
 
@@ -56,7 +54,6 @@ class Module {
 			$this->path    = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
 			$this->name    = $name;
 			$this->files   = (isset($module->files)) ? $module->files : false;
-			$this->folders = (isset($module->folders)) ? $module->folders : false;
 		}
 
 		// Set up the lock vars
@@ -68,7 +65,6 @@ class Module {
 			$this->lockPath    = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
 			$this->lockName    = $name;
 			$this->lockFiles   = (isset($module->files)) ? $module->files : false;
-			$this->lockFolders = (isset($module->folders)) ? $module->folders : false;
 		}
 
 		if(!$this->name && $this->lockName)
@@ -117,29 +113,19 @@ class Module {
 		{
 			$latest = File::latest($work.DS.'unzip')->getRealPath();
 
-			// Move folders
-			if($this->folders)
-			{
-				foreach($this->folders as $folder)
-				{
-					if(is_dir($latest.DS.$folder))
-					{
-						echo 'Moving folder ' .$latest.DS.$folder .' to ' .$this->path.DS.basename($folder) .PHP_EOL;
-						File::mvdir($latest.DS.$folder, $this->path.DS.basename($folder));
-					}
-					else
-					{
-						echo 'Error, folder not found ' .$latest.DS.$file .PHP_EOL;
-					}
-				}
-			}
-
-			// Move single files
+			// Move single files and folders
 			if($this->files)
 			{
 				foreach($this->files as $file)
 				{
-					if(file_exists($latest.DS.$file))
+					// If its a folder
+					if(is_dir($latest.DS.$file))
+					{
+						echo 'Moving folder ' .$latest.DS.$file .' to ' .$this->path.DS.basename($file) .PHP_EOL;
+						File::mvdir($latest.DS.$file, $this->path.DS.basename($file));
+					}
+					// If its a file
+					elseif(file_exists($latest.DS.$file))
 					{
 						echo 'Moving file ' .$latest.DS.$file .' to ' .$this->path.DS.basename($file) .PHP_EOL;
 						File::mkdir($this->path);

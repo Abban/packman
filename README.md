@@ -46,17 +46,14 @@ Here's a sample of the json file:
     			"files" : [
     				"typeplate/scss/_typeplate.scss",
     				"typeplate/scss/_vars-typeplate.scss"
-    			],
-                "folders" : [
-                    "typeplate/css"
-                ]
+    			]
     		}
     	}
     }
 
 Currently ``name`` and ``description`` do nothing. ``modulesFolder`` is the default location you want your modules in.
 
-Modules containes each module. You can see in this example wt-menu has its own custom path specified. If you don't include the path paramater it will default to the general one. The ``url`` parameter is the online location of your files. In this you can see ``%username%``, ``%repo%``, ``%branch%`` etc. These values will be replaced by those in ``pathData``. This just makes it a bit easier to add multiple repos with the same url. The typeplate module also has ``files`` specified. This is used if you only want to use certain files from a repo. Only those files will be imported into its module. You can also specify any folders you want to import using the ``folders`` array.
+Modules containes each module. You can see in this example wt-menu has its own custom path specified. If you don't include the path paramater it will default to the general one. The ``url`` parameter is the online location of your files. In this you can see ``%username%``, ``%repo%``, ``%branch%`` etc. These values will be replaced by those in ``pathData``. This just makes it a bit easier to add multiple repos with the same url. The typeplate module also has ``files`` specified. This is used if you only want to use certain files or folders from a repo. Only those files or folders will be imported into its module.
 
 ##TODO
 * Option to create consistent less/sass import files and a codekit prepend javascript file that can be imported into your own stylesheets/js. This means after you update you don't have to manually include all the resources.
