@@ -23,6 +23,8 @@ class Module {
 	private $lockPath;
 	private $lockFiles;
 
+
+
 	/**
 	 * Add the module details
 	 * 
@@ -72,6 +74,8 @@ class Module {
 
 		return ($this->name || $this->lockName);
 	}
+
+
 
 	/**
 	 * Download the zip and extract the files into the modules folder
