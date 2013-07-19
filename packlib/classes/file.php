@@ -3,7 +3,7 @@
  * Packman - Minimal Front End Package Manager
  *
  * @package  Packman
- * @since  0.2
+ * @since    0.8
  * @author   Abban Dunne <himself@abandon.ie>
  * @link     http://abandon.ie
  */
