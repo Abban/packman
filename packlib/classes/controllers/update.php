@@ -11,6 +11,7 @@
 class Update {
 
 	private $mode = 'Updating';
+	private $folders = array();
 
 
 
@@ -47,7 +48,18 @@ class Update {
 			}
 		}
 		
-		File::copy(BASEPATH .'packman.json', BASEPATH .'packman.lock');
+		// Archive the old lock file
+		archiveLock();
+
+		// Add the created folders to the module in the lock file
+		foreach($this->folders as $name => $folder)
+		{
+			// Order folders by string length to make sure we delete subfolders before parent folders
+			usort($folder, 'sortByLength');
+			if(isset($json->modules->$name)) $json->modules->$name->folders = $folder;
+		}
+
+		Json::createLock($json);
 	}
 
 
@@ -63,7 +75,7 @@ class Update {
 		$m = new Module();
 		if($m->setup($name, $this->mode))
 		{
-			$m->update();
+			$this->folders[$name] = $m->update();
 		}
 		else
 		{

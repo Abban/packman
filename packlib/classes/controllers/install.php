@@ -10,7 +10,8 @@
 
 class Install {
 
-	protected $mode = 'Installing';
+	private $mode = 'Installing';
+	private $folders = array();
 	
 
 
@@ -23,23 +24,31 @@ class Install {
 	{
 		if(!Json::getLockFile())
 		{
-			$options = Json::getPackageFile();
+			$json = Json::getPackageFile();
 
 			// Can't find json
-			if(!$options)
+			if(!$json)
 			{
 				echo 'Error: Could not load packman.json, does it exist and is it in the right location?' .PHP_EOL;
 			}
 			else
 			{
-				foreach($options->modules as $name => $module)
+				foreach($json->modules as $name => $module)
 				{
 					$m = new Module();
 					$m->setup($name, $this->mode);
-					$m->install();
+					$this->folders[$name] = $m->install();
 				}
-				
-				File::copy(BASEPATH .'packman.json', BASEPATH .'packman.lock');
+
+				// Add the created folders to the module in the lock file
+				foreach($this->folders as $name => $folder)
+				{
+					// Order folders by string length to make sure we delete subfolders before parent folders
+					usort($folder, 'sortByLength');
+					if(isset($json->modules->$name)) $json->modules->$name->folders = $folder;
+				}
+
+				Json::createLock($json);
 			}
 		}
 		else
