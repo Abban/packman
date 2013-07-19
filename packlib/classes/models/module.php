@@ -18,10 +18,12 @@ class Module {
 	private $path;
 	private $name;
 	private $files;
+	private $absolutePaths;
 
 	private $lockName;
 	private $lockPath;
 	private $lockFiles;
+	private $lockAbsolutePaths;
 
 
 
@@ -50,10 +52,11 @@ class Module {
 				foreach($module->pathData as $title => $data) $url = str_replace('%' .$title .'%', $data, $url);
 			}
 
-			$this->url      = $url;
-			$this->path     = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
-			$this->name     = $name;
-			$this->files    = (isset($module->files)) ? $module->files : false;
+			$this->url           = $url;
+			$this->path          = BASEPATH.(isset($module->path) ? $module->path : $json->path).DS.$name;
+			$this->name          = $name;
+			$this->files         = (isset($module->files)) ? $module->files : false;
+			$this->absolutePaths = (isset($module->absolutePaths)) ? $module->absolutePaths : false;
 		}
 
 		// Set up the lock vars
@@ -61,10 +64,11 @@ class Module {
 		{
 			$module = $lock->modules->$name;
 
-			$this->installed   = true;
-			$this->lockPath    = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
-			$this->lockName    = $name;
-			$this->lockFiles   = (isset($module->files)) ? $module->files : false;
+			$this->installed         = true;
+			$this->lockPath          = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
+			$this->lockName          = $name;
+			$this->lockFiles         = (isset($module->files)) ? $module->files : false;
+			$this->lockAbsolutePaths = (isset($module->lockAbsolutePaths)) ? $module->lockAbsolutePaths : false;
 		}
 
 		if(!$this->name && $this->lockName)
@@ -119,7 +123,7 @@ class Module {
 				foreach($this->files as $file => $loc)
 				{
 					$from = $latest.DS.$file;
-					$to = $this->path.DS.($loc ? $loc.DS : '').basename($file);
+					$to = ($this->absolutePaths ? BASEPATH : $this->path.DS).($loc ? $loc.DS : '').basename($file);
 
 					// If its a folder
 					if(is_dir($from))
@@ -131,7 +135,7 @@ class Module {
 					elseif(file_exists($from))
 					{
 						echo 'Moving file ' .$from .' to ' .$to .PHP_EOL;
-						File::mkdir($this->path.($loc ? DS.$loc : ''));
+						File::mkdir(($this->absolutePaths ? BASEPATH : $this->path.DS).($loc ? $loc.DS : ''));
 						File::move($from, $to);
 					}
 					else
@@ -186,6 +190,27 @@ class Module {
 	{
 		if($this->installed)
 		{
+			if($this->lockFiles)
+			{
+				foreach($this->lockFiles as $file => $loc)
+				{
+					$path = ($this->lockAbsolutePaths ? BASEPATH : $this->lockPath.DS).($loc ? $loc.DS : '').basename($file);
+
+					// If its a directory
+					if(is_dir($path))
+					{
+						echo 'Deleting folder ' .$path .PHP_EOL;
+						File::rmdir($path);
+					}
+					// If its a file
+					elseif(file_exists($path))
+					{
+						echo 'Deleting file ' .$path .PHP_EOL;
+						File::delete($path);
+					}
+				}
+			}
+
 			File::rmdir($this->lockPath);
 			$this->setInstalled(false);
 		}

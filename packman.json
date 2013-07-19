@@ -20,10 +20,11 @@
 				"repo" : "typeplate.github.io",
 				"branch" : "master"
 			},
+			"absolutePaths" : true,
 			"files" : {
-				"typeplate/scss/_typeplate.scss" : "scss",
-				"typeplate/scss/_vars-typeplate.scss" : "scss",
-				"typeplate/css" : false
+				"typeplate/scss/_typeplate.scss" : "assets/modtwoles/scss",
+				"typeplate/scss/_vars-typeplate.scss" : "assets/modtwoles/scss",
+				"typeplate/css" : "assets/modtwoles/"
 			}
 		}
 	}
