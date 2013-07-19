@@ -10,7 +10,8 @@
 
 class Install {
 
-	protected $mode = 'Installing';
+	private $mode = 'Installing';
+	private $folders = array();
 	
 
 
@@ -36,10 +37,18 @@ class Install {
 				{
 					$m = new Module();
 					$m->setup($name, $this->mode);
-					$m->install();
+					$this->folders[$name] = $m->install();
 				}
+
+				// Add the created folders to the module in the lock file
+				foreach($this->folders as $name => $folder)
+				{
+					if(isset($options->modules->$name)) $options->modules->$name->folders = $folder;
+				}
+
+				Json::createLock($options);
 				
-				File::copy(BASEPATH .'packman.json', BASEPATH .'packman.lock');
+				//File::copy(BASEPATH .'packman.json', BASEPATH .'packman.lock');
 			}
 		}
 		else

@@ -363,4 +363,20 @@ class File {
 		return $latest;
 	}
 
+	/**
+	 * Checks if a directory is empty.
+	 *
+	 * @param  string       $directory
+	 * @param  int          $options
+	 * @return bool
+	 */
+	public static function dirempty($directory)
+	{
+		$count = 0;
+		foreach (new DirectoryIterator($directory) as $fileInfo) {
+		    if(!$fileInfo->isDot()) $count++;
+		}
+		return ($count > 0);
+	}
+
 }

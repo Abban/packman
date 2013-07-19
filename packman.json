@@ -24,7 +24,7 @@
 			"files" : {
 				"typeplate/scss/_typeplate.scss" : "assets/modtwoles/scss",
 				"typeplate/scss/_vars-typeplate.scss" : "assets/modtwoles/scss",
-				"typeplate/css" : "assets/modtwoles/"
+				"typeplate/css" : "assets/modtwoles"
 			}
 		}
 	}

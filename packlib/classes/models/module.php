@@ -25,7 +25,7 @@ class Module {
 	private $lockFiles;
 	private $lockAbsolutePaths;
 
-
+	private $mkdir = array();
 
 	/**
 	 * Add the module details
@@ -120,6 +120,30 @@ class Module {
 			// Move single files and folders
 			if($this->files)
 			{
+				// If absolute paths is on loop through files and folders
+				// check if path folders don't exist and log what is going
+				// to be created. This is for easier deletion later.
+				if($this->absolutePaths)
+				{
+					foreach($this->files as $file => $loc)
+					{
+						$dirs = explode('/', $loc);
+						$current = '';
+						foreach($dirs as $dir)
+						{
+							if($dir != '')
+							{
+								$current .= $dir .'/';
+								if(!is_dir(BASEPATH.$current) && !in_array($current, $this->mkdir))
+								{
+									$this->mkdir[] = $current;
+									echo 'Directory to be created: ' .$current .PHP_EOL;
+								}
+							}
+						}
+					}
+				}
+
 				foreach($this->files as $file => $loc)
 				{
 					$from = $latest.DS.$file;
@@ -164,6 +188,9 @@ class Module {
 
 		// Set the module to installed
 		$this->setInstalled();
+
+		// Return any folders created if any
+		return $this->mkdir;
 	}
 
 
