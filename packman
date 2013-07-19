@@ -41,6 +41,7 @@ $imports = array(
 	'classes/controllers/packman',
 	'classes/controllers/install',
 	'classes/controllers/update',
+	'classes/controllers/uninstall',
 	'classes/controllers/help',
 	'classes/models/json',
 	'classes/models/module',

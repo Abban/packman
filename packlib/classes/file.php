@@ -372,11 +372,18 @@ class File {
 	 */
 	public static function dirempty($directory)
 	{
-		$count = 0;
-		foreach (new DirectoryIterator($directory) as $fileInfo) {
-		    if(!$fileInfo->isDot()) $count++;
+		if(is_dir($directory))
+		{
+			$count = 0;
+			foreach (new DirectoryIterator($directory) as $fileInfo) {
+			    if(!$fileInfo->isDot()) $count++;
+			}
+			return ($count > 0);
 		}
-		return ($count > 0);
+		else
+		{
+			return false;
+		}
 	}
 
 }

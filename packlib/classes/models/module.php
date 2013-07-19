@@ -23,6 +23,7 @@ class Module {
 	private $lockName;
 	private $lockPath;
 	private $lockFiles;
+	private $lockFolders;
 	private $lockAbsolutePaths;
 
 	private $mkdir = array();
@@ -57,6 +58,12 @@ class Module {
 			$this->name          = $name;
 			$this->files         = (isset($module->files)) ? $module->files : false;
 			$this->absolutePaths = (isset($module->absolutePaths)) ? $module->absolutePaths : false;
+
+			// Add modules paths to mkdir list
+			if(isset($module->path))
+			{
+				$this->makeDirArray($module->path);
+			}
 		}
 
 		// Set up the lock vars
@@ -68,7 +75,8 @@ class Module {
 			$this->lockPath          = BASEPATH.(isset($module->path) ? $module->path : $lock->path).DS.$name;
 			$this->lockName          = $name;
 			$this->lockFiles         = (isset($module->files)) ? $module->files : false;
-			$this->lockAbsolutePaths = (isset($module->lockAbsolutePaths)) ? $module->lockAbsolutePaths : false;
+			$this->lockFolders       = (isset($module->folders)) ? $module->folders : false;
+			$this->lockAbsolutePaths = (isset($module->absolutePaths)) ? $module->absolutePaths : false;
 		}
 
 		if(!$this->name && $this->lockName)
@@ -112,10 +120,11 @@ class Module {
 		// Extract the zip
 		$zip->extractTo($work.DS.'unzip');
 
+		$latest = File::latest($work.DS.'unzip')->getRealPath();
+
 		// If files are specified just move them
 		if($this->files)
 		{
-			$latest = File::latest($work.DS.'unzip')->getRealPath();
 
 			// Move single files and folders
 			if($this->files)
@@ -127,20 +136,7 @@ class Module {
 				{
 					foreach($this->files as $file => $loc)
 					{
-						$dirs = explode('/', $loc);
-						$current = '';
-						foreach($dirs as $dir)
-						{
-							if($dir != '')
-							{
-								$current .= $dir .'/';
-								if(!is_dir(BASEPATH.$current) && !in_array($current, $this->mkdir))
-								{
-									$this->mkdir[] = $current;
-									echo 'Directory to be created: ' .$current .PHP_EOL;
-								}
-							}
-						}
+						$this->makeDirArray($loc);
 					}
 				}
 
@@ -172,9 +168,9 @@ class Module {
 		// No files specified just stick the contents of the entire repo into the module folder
 		else
 		{
-			// Move files by order created deleting as we go
+			// Move files
 			echo 'Moving entire repo to ' .$this->path .PHP_EOL;
-			$latest = File::latest($work.DS.'unzip')->getRealPath();
+
 			@chmod($latest, 0777);
 			File::mvdir($latest, $this->path);
 		}
@@ -203,7 +199,7 @@ class Module {
 	function update()
 	{
 		$this->delete();
-		if(!$deleting) $this->install();
+		if(!$this->deleting) return $this->install();
 	}
 
 
@@ -238,7 +234,22 @@ class Module {
 				}
 			}
 
+			// Remove the main module folder
 			File::rmdir($this->lockPath);
+
+			// If there was folders created on install and they are now empty then delete them
+			if($this->lockFolders)
+			{
+				foreach($this->lockFolders as $folder)
+				{
+					if(File::dirempty(BASEPATH . $folder))
+					{
+						echo 'Removing folder: ' .$folder .PHP_EOL;
+						File::rmdir(BASEPATH . $folder);
+					}
+				}
+			}
+
 			$this->setInstalled(false);
 		}
 		else
@@ -279,5 +290,24 @@ class Module {
 		$this->lockPath  = ($installed) ? $this->path : null;
 		$this->lockName  = ($installed) ? $this->name : null;
 		$this->lockFiles = ($installed) ? $this->files : null;
+	}
+
+
+	private function makeDirArray($path)
+	{
+		$dirs = explode('/', $path);
+		$current = '';
+		foreach($dirs as $dir)
+		{
+			if($dir != '')
+			{
+				$current .= $dir .'/';
+				if(!is_dir(BASEPATH.$current) && !in_array($current, $this->mkdir))
+				{
+					$this->mkdir[] = $current;
+					echo 'Directory to be created: ' .$current .PHP_EOL;
+				}
+			}
+		}
 	}
 }

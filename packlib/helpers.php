@@ -411,3 +411,15 @@ function get_file_size($size)
 	$units = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB');
 	return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2).' '.$units[$i];
 }
+
+function sortByLength($a, $b)
+{
+    return strlen($b)-strlen($a);
+}
+
+function archiveLock()
+{
+	// Archive the old lock file
+	File::mkdir(BASEPATH.PACKLIB.DS.'trash');
+	File::move(BASEPATH.'packman.lock', BASEPATH.PACKLIB.DS.'trash'.DS.'packman-'.time().'.json');
+}
