@@ -3,6 +3,8 @@ Packman
 
 Minimal project module manager
 
+**This software is in beta. The structure of the json is likely to change on the way to v1**
+
 ## Installation
 1. Stick the ``packman`` file, ``packman.json`` file and ``packlib`` folder into your project root. You might need to chmod ``packman`` to 777.
 2. Edit ``packman.json`` to include any modules you want to install.
